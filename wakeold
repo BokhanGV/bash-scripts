@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# this logs on my router, sends wake on ethernet to the old, ssh'es old
+
+echo "enter pass: "; read -r pass #careful - it is visible!
+oldMAC="60:EB:69:C3:89:F8"
+router=192.168.1.1
+login=admin
+wake="ether-wake -i vlan1 $oldMAC"
+
+(
+echo open ${router} 23; sleep 0.1
+echo ${login}; 		sleep 0.1
+echo ${pass}; 		sleep 0.1
+echo ${wake}; 		sleep 0.1
+echo exit ) | telnet
+
+ssh -o ConnectTimeout=40 old@old

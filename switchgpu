@@ -1,0 +1,18 @@
+#!/bin/bash	
+
+# this is backend for cinnamon desklet that shows and changes the state of nvidia(R) prime(TM).
+# considering that your /usr/bin/prime-select has a suid bit
+
+iconpath="/home/$USER/.local/share/icons"
+iconname="gpu-icon.png"
+
+	if [ `prime-select query` = "nvidia" ]; then 
+		prime-select intel
+		rm $iconpath/gpu-icon/$iconname
+		ln -s $iconpath/intel-logo.png $iconpath/gpu-icon/$iconname
+	elif [ `prime-select query` = "intel" ]; then 
+		prime-select nvidia
+		rm $iconpath/gpu-icon/$iconname
+		ln -s $iconpath/nvidia-logo.png $iconpath/gpu-icon/$iconname
+	else 	gnome-terminal -x sh -c 'echo "error! unknown gpu"; read -p "Press any key to continue... " -n1 -s' 
+	fi

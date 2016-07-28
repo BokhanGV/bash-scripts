@@ -1,0 +1,15 @@
+#!/bin/sh
+TOGGLE=./.musicmounted
+if [ ! -e $TOGGLE ]; then
+	if curlftpfs -o nonempty ftp://9876:9876@192.168.1.48:9876/Music $HOME/Music; then
+		touch $TOGGLE;
+		echo "mounting OK"
+	else echo "mounting error";
+	fi
+else
+	if fusermount -u $HOME/Music; then
+		echo "unmounting OK"
+		rm $TOGGLE;
+	else echo "unmounting error";
+	fi
+fi

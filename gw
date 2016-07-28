@@ -1,0 +1,19 @@
+#!/bin/bash
+VMsList=(` VBoxManage list vms | grep -o '".*"'  | tr -d '"' `)
+
+for ((i=0; i<=(${#VMsList[@]} -1); i++))
+do
+   echo "$[i+1]: ${VMsList[$i]}"
+done
+
+echo "choose VM by number"
+read VMnumber;
+VMname=`echo "${VMsList[$[VMnumber-1]]}"`
+
+ipRegExp=([0-9]{1,3}[\.]){3}[0-9]{1,3};
+
+VMip=`VBoxManage guestproperty enumerate $VMname | grep -E -o "/GuestInfo/Net/0/V4/IP, value: $ipRegExp" | grep -E -o $ipRegExp`; 
+gnome-terminal -x sh -c "VBoxManage startvm $VMname --type headless; 
+ssh vuser@$VMip;
+
+VBoxManage controlvm educ-lin savestate;"

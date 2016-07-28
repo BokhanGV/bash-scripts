@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# this creates a .vmdk from a real device thus allowing a vm to mount it. yes, it is stupid.
+# warning! do not let a non-special filesystem be mounted in several OSes - it will probably cause data corruption
+
+# requires sudo privileges. put /dev/name_of_device as $1 and name of user who will use the .vmdk as $2.
+
+DISK="/dev/$1"; DISKnopath="$1" 			# option: use physical address of the exact disk like `readlink -f /dev/disk/by-uuid/D4DEBECFDEBEA95E`
+USERR=$2	 					
+numberOfPartitions=`ls -l "$DISK"* | wc -l` 		# counts partitions
+RULES="/lib/udev/rules.d/99-vbox-disk-rights.rules" 	# constant; correct for ubuntu 14.04, may vary for other distributions
+VMDK="/home/$2"						# where .vmdk should be located
+
+
+	echo 'KERNEL=="'$DISKnopath'", GROUP="vboxusers"' > $RULES
+for ((i = 1; i <= $((numberOfPartitions - 1)); i++))
+do 	echo 'KERNEL=="'$DISKnopath$i'", GROUP="vboxusers"' >> $RULES
+	ptsvar+="$i," 					# counts disk and partition records to the rules. expected to be equal to numberOfPartitions
+done
+
+useradd -g $USERR vboxusers				# not needed most of times
+VBoxManage internalcommands createrawvmdk -filename $VMDK/disk.vmdk -rawdisk $DISK -partitions $ptsvar -relative
+
+mv $VMDK/disk*.vmdk $VMDK/Oracle\ VMs/
+chown $USERR:$USERR $VMDK/Oracle\ VMs/disk*.vmdk

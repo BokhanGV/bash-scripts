@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# this should let you execute a command on another tty. help provided
+
+user_invoker=`who | grep tty$1 | grep -Eo "([a-zA-Z]{1,})" | head -1`
+user_recipient=`whoami`
+command='exec '$2' <> /dev/tty'$1' >&0 2>&1'
+
+helptext="Usage: intty [number of tty] [command]
+number of tty is an integer from 0 to 8
+multiple word command should be surrounded by double quote"
+
+sayhelp="say intty help"
+
+if [ "$1" = "-h" ] || [ "$1" = "h" ] || [ "$1" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "help" ]	
+			then echo "$helptext"
+elif [ "$1" = "" ];	then echo $sayhelp
+
+else
+	if [[ "$1" = [!0-9] ]]; then echo "first parameter is not valid. $sayhelp";  exit 0
+	fi
+
+	if [ "$2" = "" ]; 	then echo "second parameter is not valid. $sayhelp"; exit 0
+	fi
+
+	if [ "$user_invoker" = "$user_recipient" ]; 	then setsid sh -c "$command"
+	else 						echo "this user is not logged in tty$1. sudo rights needed"
+							sudo setsid sh -c "$command"
+	fi
+fi
+
+
+
+
+

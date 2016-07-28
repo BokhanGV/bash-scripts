@@ -1,0 +1,9 @@
+#!/bin/bash
+if [ `prime-select query` = "nvidia" ];	then 
+	echo 'cannot be done on nvidia'
+	# logic to be done
+fi
+
+if [ `prime-select query` = "intel" ]; then
+	xcalib -i -a
+fi

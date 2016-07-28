@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# this toggles touchpad state. looks like my laptop manufacturer did not provide extra keyboard keys support for linux
+
+device_name='ETPS/2 Elantech Touchpad'
+property=`xinput list-props "$device_name" | grep "Device Enabled" | grep -Eo "([0-9]{1,3})" | head -1`
+
+flipped_state=$(xinput list-props "$device_name" |
+                awk "/\\($property\\)/ {print 1 - \$NF}")
+xinput set-prop "$device_name" "$property" "$flipped_state"
