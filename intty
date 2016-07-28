@@ -9,7 +9,6 @@ command='exec '$2' <> /dev/tty'$1' >&0 2>&1'
 helptext="Usage: intty [number of tty] [command]
 number of tty is an integer from 0 to 8
 multiple word command should be surrounded by double quote"
-
 sayhelp="say intty help"
 
 if [ "$1" = "-h" ] || [ "$1" = "h" ] || [ "$1" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "help" ]	
