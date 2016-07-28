@@ -3,7 +3,7 @@
 # this creates a .vmdk from a real device thus allowing a vm to mount it. yes, it is stupid.
 # warning! do not let a non-special filesystem be mounted in several OSes - it will probably cause data corruption
 
-# requires sudo privileges. put /dev/name_of_device as $1 and name of user who will use the .vmdk as $2.
+# requires sudo privileges. put (/dev/) name_of_device as $1 and name of user who will use the .vmdk as $2.
 
 DISK="/dev/$1"; DISKnopath="$1" 			# option: use physical address of the exact disk like `readlink -f /dev/disk/by-uuid/D4DEBECFDEBEA95E`
 USERR=$2	 					
