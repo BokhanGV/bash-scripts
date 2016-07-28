@@ -1,9 +1,13 @@
 #!/bin/bash
+
+# this inverts colours on all screens if an open-source video driver is used. nvidia proprietary driver does not allow this
+# useful to read at night
+
 if [ `prime-select query` = "nvidia" ];	then 
 	echo 'cannot be done on nvidia'
 	# logic to be done
 fi
 
 if [ `prime-select query` = "intel" ]; then
-	xcalib -i -a
+	xcalib -i -a				# this should do with any open-source video driver
 fi
