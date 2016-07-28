@@ -1,4 +1,7 @@
 #!/bin/sh
+
+# this mounts an ftp resource from another local device
+
 TOGGLE=./.musicmounted
 if [ ! -e $TOGGLE ]; then
 	if curlftpfs -o nonempty ftp://9876:9876@192.168.1.48:9876/Music $HOME/Music; then
